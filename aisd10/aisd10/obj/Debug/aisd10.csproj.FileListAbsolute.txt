@@ -1,0 +1,7 @@
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\bin\Debug\aisd10.exe.config
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\bin\Debug\aisd10.exe
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\bin\Debug\aisd10.pdb
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\obj\Debug\aisd10.csprojAssemblyReference.cache
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\obj\Debug\aisd10.csproj.CoreCompileInputs.cache
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\obj\Debug\aisd10.exe
+C:\Users\RJ_DraGoN\source\repos\aisd10\aisd10\obj\Debug\aisd10.pdb
