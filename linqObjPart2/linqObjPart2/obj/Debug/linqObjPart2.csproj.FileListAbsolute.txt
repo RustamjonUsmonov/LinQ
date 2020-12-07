@@ -1,0 +1,7 @@
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\bin\Debug\linqObjPart2.exe.config
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\bin\Debug\linqObjPart2.exe
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\bin\Debug\linqObjPart2.pdb
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\obj\Debug\linqObjPart2.csprojAssemblyReference.cache
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\obj\Debug\linqObjPart2.csproj.CoreCompileInputs.cache
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\obj\Debug\linqObjPart2.exe
+C:\Users\RJ_DraGoN\source\repos\linqObjPart2\linqObjPart2\obj\Debug\linqObjPart2.pdb
