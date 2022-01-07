@@ -1,0 +1,831 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace linqObjPart2
+{
+    class A
+    {
+        public int Id { get; set; }
+        public int YearBirth { get; set; }
+        public string Address { get; set; }
+    }
+    class B
+    {
+        public string Articul { get; set; }
+        public string Category { get; set; }
+        public string Country { get; set; }
+    }
+    class C
+    {
+        public int Id { get; set; }
+        public string Market { get; set; }
+        public int Discount { get; set; }
+    }
+    class D
+    {
+        public string Articul { get; set; }
+        public string Market { get; set; }
+        public int Cost { get; set; }
+    }
+    class E
+    {
+        public int Id { get; set; }
+        public string Articul { get; set; }
+        public string Market { get; set; }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var a = new List<A>
+            {
+                new A() { Id = 001, YearBirth = 2000, Address = "Street1" },
+                new A() { Id = 002, YearBirth = 1980, Address = "Street2" },
+                new A() { Id = 003, YearBirth = 1999, Address = "Street3" },
+                new A() { Id = 004, YearBirth = 2000, Address = "Street1" },
+                new A() { Id = 005, YearBirth = 2001, Address = "Street5" },
+                new A() { Id = 006, YearBirth = 2005, Address = "Street1" },
+                new A() { Id = 007, YearBirth = 2001, Address = "Street3" },
+                new A() { Id = 008, YearBirth = 2000, Address = "Street5" },
+                new A() { Id = 009, YearBirth = 1998, Address = "Street2" },
+                new A() { Id = 010, YearBirth = 1996, Address = "Street1" }
+            };
+
+            var b = new List<B>()
+            {
+                new B(){Articul="AA1001-1001",Category="Clothes",Country="China" },
+                new B(){Articul="JO1002-1002",Category="Phone",Country="USA" },
+                new B(){Articul="RR1003-1003",Category="Computers",Country="Russia" },
+                new B(){Articul="AK1004-1004",Category="Pictures",Country="Vietnam" },
+                new B(){Articul="AB1005-1005",Category="Phone",Country="China" },
+                new B(){Articul="RJ1006-1006",Category="Computers",Country="Tajikistan" },
+                new B(){Articul="UI1007-1007",Category="Shoes",Country="Japan" },
+                new B(){Articul="BC1008-1008",Category="Tree",Country="England" }
+            };
+
+            var c = new List<C>()
+            {
+                new C(){Discount=5, Id=001, Market="Market1" },
+                new C(){Discount=20, Id=006, Market="Market2" },
+                new C(){Discount=15, Id=007, Market="Market3" },
+                new C(){Discount=30, Id=002, Market="Market4" },
+                new C(){Discount=10, Id=004, Market="Market1" },
+                new C(){Discount=50,  Id=003, Market="Market2" },
+                new C(){Discount=50,  Id=003, Market="Market2" },
+                new C(){Discount=45, Id=008, Market="Market3" },
+                new C(){Discount=30, Id=009, Market="Market1" }
+            };
+
+            var d = new List<D>
+            {
+                new D() { Articul = "AA1001-1001", Cost = 1000, Market = "Market1" },
+                new D() { Articul = "AB1005-1005", Cost = 1000, Market = "Market2" },
+                new D() { Articul = "AA1001-1001", Cost = 500, Market = "Market2" },
+                new D() { Articul = "RR1003-1003", Cost = 480, Market = "Market1" },
+                new D() { Articul = "RR1003-1003", Cost = 250, Market = "Market4" },
+                new D() { Articul = "RR1003-1003", Cost = 50, Market = "Market2" },
+                new D() { Articul = "AB1005-1005", Cost = 560, Market = "Market2" },
+                new D() { Articul = "RJ1006-1006", Cost = 1436, Market = "Market1" },
+                new D() { Articul = "RJ1006-1006", Cost = 1436, Market = "Market1" },
+                new D() { Articul = "AK1004-1004", Cost = 950, Market = "Market3" },
+                new D() { Articul = "AK1004-1004", Cost = 750, Market = "Market3" },
+                new D() { Articul = "JO1002-1002", Cost = 1550, Market = "Market2" },
+                new D() { Articul = "UI1007-1007", Cost = 2000, Market = "Market1" }
+            };
+
+            var e = new List<E>
+            {
+                new E() { Articul = "UI1007-1007", Id = 001, Market = "Market1" },
+                new E() { Articul = "JO1002-1002", Id = 006, Market = "Market2" },
+                new E() { Articul = "AK1004-1004", Id = 007, Market = "Market3" },
+                new E() { Articul = "RJ1006-1006", Id = 004, Market = "Market1" },
+                new E() { Articul = "AB1005-1005", Id = 003, Market = "Market2" },
+                new E() { Articul = "AK1004-1004", Id = 003, Market = "Market2" },
+                new E() { Articul = "RR1003-1003", Id = 002, Market = "Market4" }
+            };
+
+            /*LinqObj71. Даны последовательности A и C, включающие следующие поля: Свойства последовательностей описаны в преамбуле к данной
+             * подгруппе заданий. Для каждого магазина определить потребителей, имеющих максимальную скидку в этом магазине (вначале 
+             * выводится название магазина, затем код потребителя, его год рождения и значение максимальной скидки). Если для некоторого магазина
+             * имеется несколько потребителей с максимальной скидкой, то вывести данные о потребителе с минимальным кодом. 
+             * Сведения о каждом магазине выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке.*/
+            /*var ans = a.GroupJoin(c, p => p.Id, v => v.Id, (x, z) => new
+            {
+                x.Address,
+                x.Id,discount=z.Select(t=>t.Discount),
+                market = z.Select(cc => cc.Market)
+            }).GroupBy(g => g.market).Select(s => new
+            {
+                 itemMax = (from i in s.Select(t=>t.discount)
+                                let maxDisc = s.Max(m => m.discount)
+                                where i == maxDisc
+                                select i).FirstOrDefault(),
+                it= s.Where(x=>x.discount==s.max(q=>q.discount)).select(z=>z.discount).first()
+            ids =s.Select(ds=>ds.Id).First(),
+                market = s.Key,
+                that=s.Select(v=>v.discount).Max()
+            });
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.itemMax.FirstOrDefault()}\t{item.market.FirstOrDefault()}\t{item.ids}");
+            }*/
+            #region
+            /*LinqObj72.Для каждого потребителя, указанного в A, определить количество магазинов, в которых ему предоставляется
+             * скидка (вначале выводится количество магазинов, затем код потребителя, потом его улица проживания). Если у некоторого 
+             * потребителя нет скидки ни в одном магазине, то для него выводится количество магазинов, равное 0. Сведения о каждом потребителе
+             * выводить на новой строке и упорядочивать по возрастанию количества магазинов, а при равном количестве – по возрастанию кодов
+             * потребителей.*/
+            /*var ans = a.GroupJoin(c, p => p.Id, p2 => p2.Id, (n, m) => new
+            {
+                n.Id,
+                market = m.Select(cc => cc.Market),
+                discount = m.Select(se => se.Discount),
+                group = m.GroupBy(g => g.Id).Select(se => new
+                {
+                    
+                    arr =se.GroupBy(gr=>gr.Discount).Select(see=>new {
+                        n.Id,
+                        market = m.Select(cc => cc.Market).First(),
+                        discount = m.Select(asss => asss.Discount),
+                        count =see.Count() })
+                })
+            }).SelectMany(z=>z.group).SelectMany(zz=>zz.arr);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.count}\t{item.Id}\t{item.market} \t");
+            }*/
+            /*LinqObj73.Для каждого магазина и каждой улицы определить количество потребителей, живущих на этой улице и имеющих скидку 
+             * в этом магазине (вначале выводится название магазина, затем название улицы, потом количество потребителей со скидкой). 
+             * Если для некоторой пары «магазин–улица» потребители со скидкой не найдены, то данные об этой паре не выводятся.
+             * Сведения о каждой паре «магазин–улица» выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке,
+             * а для одинаковых названий магазинов – по названиям улиц (также в алфавитном порядке).*/
+            /* var ans=a.GroupJoin(c,p=>p.Id,p2=>p2.Id, (n, m) => new
+             {
+                 n.Id,
+                 market = m.Select(cc => cc.Market),
+                 discount = m.Select(se => se.Discount),
+                 group = m.GroupBy(g => g.Market).Select(se => new
+                 {
+
+                     arr = se.GroupBy(gr => gr.Discount).Select(see => new {
+                         n.Address,
+                         n.Id,
+                         market = m.Select(cc => cc.Market).First(),
+                         discount = m.Select(asss => asss.Discount),
+                         count = see.Count()
+                     })
+                 })
+             }).SelectMany(z => z.group).SelectMany(zz => zz.arr);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.market} \t {item.Address} \t {item.count} \t");
+            }*/
+            /*LinqObj74.Для каждого магазина и каждого года рождения из A определить среднюю скидку в данном магазине (в процентах)
+             * для потребителей с этим годом рождения (вначале выводится название магазина, затем год рождения, потом значение средней 
+             * скидки в процентах). Дробная часть найденного среднего значения отбрасывается, скидка выводится как целое число. 
+             * При вычислении средней скидки учитываются только потребители данного года рождения, имеющие скидку в данном магазине. 
+             * Если таких потребителей для данного магазина нет, то для этой пары «магазин–год» в качестве средней скидки выводится 0.
+             * Сведения о каждой паре «магазин–год» выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке,
+             * а для одинаковых названий магазинов – по возрастанию номеров года.*/
+            /* var ans = a.GroupJoin(c, p => p.Id, p2 => p2.Id, (n, m) => new
+             {
+                 n.Id,n.YearBirth,
+                 market = m.Select(cc => cc.Market).DefaultIfEmpty().First(),
+                 discount = m.Select(se => se.Discount).DefaultIfEmpty().First()              
+             }).GroupBy(g => g.YearBirth).Select(se => new
+             {
+                 market=se.Select(u=>u.market).DefaultIfEmpty().First(),
+                 cou=se.Select(l=>l.discount).Average(),
+                 year=se.Key
+             });
+             foreach (var item in ans)
+             {
+                 Console.WriteLine($" {item.market}\t {item.year} \t {item.cou:f0} \t");
+             }*/
+            /*LinqObj75. Даны последовательности B и D, включающие следующие поля: Для каждого магазина и каждой категории товаров 
+             * определить количество различных артикулов товаров данной категории, имеющихся в данном магазине (вначале выводится 
+             * название магазина, затем категория, потом количество различных артикулов товаров). Если для некоторого магазина товары данной
+             * категории отсутствуют, то информация о соответствующей паре «магазин–категория» не выводится. Сведения о каждой паре 
+             * «магазин–категория» выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке,
+             * а для одинаковых названий магазинов – по названиям категорий (также в алфавитном порядке).*/
+            /*var ans = b.Join(d, p => p.Articul, p2 => p2.Articul, (n, m) => new
+            {
+                n.Articul,
+                n.Category,
+                market = m.Market
+            }).GroupBy(g => g.market).Select(sd => new
+            {
+                markeee = sd.Key,
+                cat = sd.Select(x => x.Category).First(),
+                arr = sd.GroupBy(gr => gr.Articul).Select(z => new
+                {
+                    arCount = z.Count()
+                })
+            }).DefaultIfEmpty();
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.markeee}\t{item.cat}\tCount: {item.arr.Select(r=>r.arCount).First()}");
+            }*/
+            #endregion
+            /*LinqObj76. Даны последовательности B и D, включающие следующие поля: Для каждой страны-производителя определить
+             * количество магазинов, предлагающих товары, произведенные в этой стране, а также минимальную цену для товаров из данной страны
+             * по всем магазинам (вначале выводится количество магазинов, затем страна, потом минимальная цена). 
+             * Если для некоторой страны не найдено ни одного товара, представленного в каком-либо магазине, то количество магазинов 
+             * и минимальная цена полагаются равными 0. Сведения о каждой стране выводить на новой строке и упорядочивать по возрастанию
+             * количества магазинов, а в случае одинакового количества – по названиям стран в алфавитном порядке.*/
+            /* var ans = b.GroupJoin(d, p => p.Articul, p2 => p2.Articul, (k, l) => new
+             {
+                 k.Country,
+                 market = l.Select(se => se.Market).DefaultIfEmpty(),
+                 cost = l.Select(x => x.Cost).DefaultIfEmpty().Min()
+             }).GroupBy(g => g.Country).Select(s => new
+             {
+                 strana = s.Key,
+                 count = s.Where(y => !string.IsNullOrEmpty(s.SelectMany(se=>se.market).First())).Select(y => y.market).Distinct().Count(),
+                 MinPrice = s.DefaultIfEmpty().Min(y => y.cost),                
+                 countMarket = s.Where(y => !string.IsNullOrEmpty(s.SelectMany(se => se.market).First())).Select(v => v.market).Count(),
+                     //itemMin = (from i in s.Select(t => t.cost)
+                     //           let minCost = s.Select(m => m.cost).Min()
+                     //           where i == minCost
+                     //           select i).FirstOrDefault(), 
+             });
+             foreach (var item in ans)
+             {
+                 Console.WriteLine($"MarketCount: {item.count} - {item.countMarket}\t County: {item.strana}\t MinCost:{item.MinPrice}  ");
+             }*/
+            /*LinqObj77. Даны последовательности B и D, включающие следующие поля: Для каждой категории товаров определить количество магазинов,
+             * предлагающих товары данной категории, а также количество стран, в которых произведены товары данной категории, 
+             * представленные в магазинах (вначале выводится количество магазинов, затем название категории, потом количество стран). Если для 
+             * некоторой категории не найдено ни одного товара, представленного в каком-либо магазине, то информация о данной категории 
+             * не выводится. Сведения о каждой категории выводить на новой строке и упорядочивать по убыванию количества магазинов,
+             * а в случае одинакового количества – по названиям категорий в алфавитном порядке.*/
+            /*var ans = b.GroupJoin(d, p => p.Articul, p2 => p2.Articul, (k, l) => new
+            {
+                k.Country,
+                k.Category,
+                market = l.Select(se => se.Market).DefaultIfEmpty(),
+                cost = l.Select(x => x.Cost).DefaultIfEmpty().Min()
+            }).GroupBy(g => g.Category).Select(s => new
+            {
+                cat = s.Key,
+                count = s.Where(y => !string.IsNullOrEmpty(s.SelectMany(se => se.market).First())).Select(y => y.market).Distinct().Count(),
+                countCountry = s.Select(v => v.Country).Distinct().Count()
+            }).Where(x => x.count != 0).OrderByDescending(o => o.count);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"MarketCount: {item.count}\t Category: {item.cat}\t countCountry:{item.countCountry}  ");
+            }
+            var query = from bbb in b
+                        join dd in d
+                        on bbb.Articul equals dd.Articul
+                        into iMatch
+                        from i in iMatch.DefaultIfEmpty()
+                        select new { bbb.Category, bbb.Country, i?.Market }
+                        into seq
+                        group seq by seq.Category
+                        into categoryGroup
+                        
+                        select new
+                        {
+                            cat = categoryGroup.Key,
+                            count = categoryGroup.Where(y => y.Market != null).Select(y => y.Market).Distinct().Count(),
+                            countCountry = categoryGroup.Select(v => v.Country).Distinct().Count()
+                        };
+            
+            Console.WriteLine("---------------------------------------------------------");
+            foreach (var item in query)
+            {
+                Console.WriteLine($"qMarketCount: {item.count}\t Category: {item.cat}\t countCountry:{item.countCountry}  ");
+            }*/
+            /*LinqObj78. Даны последовательности D и E, включающие следующие поля: Для каждого товара определить количество 
+             * покупок данного товара и максимальную цену покупки (вначале выво-дится количество покупок, затем артикул товара, 
+             * потом максимальная цена покупки). Если некоторый товар ни разу не был продан, то информация об этом товаре не выводится.
+             * Сведения о каждом товаре выводить на новой строке и упорядочивать по возрастанию количества покупок, а в случае одинакового
+             * количества – по артикулам товаров в алфавитном порядке.*/
+            /*var query = from dd in d
+                        join ee in e
+                        on dd.Articul equals ee.Articul
+                        into iMatch
+                        from i in iMatch.DefaultIfEmpty()
+                        select new { dd?.Cost, dd.Articul }
+                      into seq
+                        group seq by seq.Articul
+                      into articulGroup
+                        select new
+                        {
+                            art=articulGroup.Key,
+                            count = articulGroup.Select(s => s.Cost).Count(),
+                            maxPrice = articulGroup.Max(x => x.Cost) ?? 0
+                        } into f
+                        orderby f.count 
+                        select f;
+            foreach (var item in query)
+            {
+                Console.WriteLine($"Count: {item.count}\tArticul: {item.art}\t MaxPrice: {item.maxPrice}");
+            }*/
+            /*LinqObj79. Даны последовательности D и E, включающие следующие поля: Для каждого магазина и каждого потребителя 
+             * определить суммарную стоимость покупок, сделанных этим потребителем в данном магазине (вначале выводится название магазина,
+             * затем код потребителя, потом суммарная стоимость покупок). Если потребитель не приобрел ни одного товара в некотором магазине,
+             * то информация о соответствующей паре «магазин–потребитель» не выводится. Сведения о каждой паре «магазин–потребитель» 
+             * выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке, а в случае одинаковых названий 
+             * – по возрастанию кодов потребителей.*/
+            /*var ans = d.Join(e, p => p.Articul, p2 => p2.Articul, (l, m) => new
+            {
+                l.Cost,
+                l.Market,
+                m.Id
+            }).GroupBy(g => g.Id).Select(s => new
+            {
+                id = s.Key,
+                arr = s.GroupBy(gr => gr.Market).Select(z => new
+                {
+                    market = z.Key,
+                    id = s.Key,
+                    sum=z.Sum(q=>q.Cost)
+                })
+            }).SelectMany(v=>v.arr).OrderBy(o=>o.market).ThenBy(t=>t.id);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"Market: {item.market}\t Id: {item.id}\t Total Price: {item.sum}");
+            }*/
+            /*LinqObj80. Даны последовательности D и E, включающие следующие поля: Для каждой пары «магазин–товар», указанной
+             * в D, определить суммарную стоимость продаж этого товара в данном магазине (вначале выводится название магазина, затем артикул
+             * товара, потом суммарная стоимость его продаж). Если товар ни разу не был продан в некотором магазине, то для соответствующей 
+             * пары «магазин–товар» в качестве суммарной стоимости выводится 0. Сведения о каждой паре «магазин–товар» выводить на новой строке
+             * и упорядочивать по названиям магазинов в алфавитном порядке, а в случае одинаковых названий – по артикулам товаров 
+             * (также в алфавитном порядке).*/
+            /*var ans = d.Join(e, p => p.Articul, p2 => p2.Articul, (l, m) => new
+            {
+                l.Cost,
+                l.Market,
+                m.Articul
+            }).GroupBy(g => g.Articul).Select(s => new
+            {
+                art = s.Key,
+                arr = s.GroupBy(gr => gr.Market).Select(z => new
+                {
+                    market = z.Key,
+                    art = s.Key,
+                    sum = z?.Sum(q => q.Cost)
+                })
+            }).SelectMany(v => v.arr).OrderBy(o => o.market).ThenBy(t=>t.art);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"Market: {item.market}\t Articul: {item.art}\t Total Price: {item.sum}");
+            }*/
+            /*LinqObj81. Даны последовательности B, D и E, включающие следующие поля: Для каждой страны-производителя определить 
+             * количество приобретенных товаров из данной страны и суммарную стоимость приобретенных товаров (вначале выводится название 
+             * страны, затем количество товаров, потом суммарная стоимость). Если сведения о проданных товарах для некоторой 
+             * страны-производителя отсутствуют, то информация об этой стране не выводится. Сведения о каждой стране выводить на новой строке
+             * и упорядочивать по названиям стран в алфавитном порядке.*/
+            /*var ans = b.Join(d, p => p.Articul, p2 => p2.Articul, (l, m) => new { l.Country, l.Articul, m.Cost })
+               .Join(e, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.Country, i.Articul, u.Cost }).GroupBy(g => g.Country).Select(s => new
+               {
+                   country = s.Key,
+                   artCount=s.Select(se=>se.Articul).Count(),sum=s.Sum(q=>q.Cost)
+               });
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"Country: {item.country}\t Count: {item.artCount}\t Price: {item.sum}");
+            }*/
+            /*LinqObj82. Даны последовательности B, D и E, включающие следующие поля: Для каждого потребителя определить количество
+             * категорий приобретенных им товаров и максимальную цену одной его покупки (вначале выводится количество категорий товаров,
+             * затем код потребителя, потом максимальная цена покупки). Сведения о каждом потребителе выводить на новой строке и
+             * упорядочивать по убыванию количества категорий, а при совпадении количества категорий – по возрастанию кодов потребителей.*/
+            /*var ans = b.Join(d, p => p.Articul, p2 => p2.Articul, (l, m) => new { l.Category, l.Articul, m.Cost })
+              .Join(e, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.Category, i.Articul,i.Id, u.Cost }).GroupBy(g => g.Id).Select(s => new
+              {
+                  cat=s.Select(z=>z.Category).First(),
+                  id = s.Key,
+                  count = s.Select(se => se.Category).Distinct().Count(),
+                  max = s.Max(q => q.Cost)
+              }).OrderByDescending(o=>o.count).ThenBy(t=>t.id);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"CategoryCount: {item.count}\t Id: {item.id}\t Price: {item.max}");
+            }*/
+            /*LinqObj83. Даны последовательности B, D и E, включающие следующие поля: Для каждого магазина, указанного в E, и каждой 
+             * страны-производителя определить суммарную стоимость товаров из данной страны, проданных в данном магазине (вначале выводится 
+             * название магазина, затем название страны, потом суммарная стоимость). Если для некоторой пары «магазин–страна» отсутствует 
+             * информация о проданных товарах, то в качестве суммарной стоимости выводится 0. Сведения о каждой паре «магазин–страна»*/
+            /*var ans = b.GroupJoin(d, p => p.Articul, p2 => p2.Articul, (l, m) => new { l.Country, l.Articul, Cost=m.Select(v=>v.Cost).DefaultIfEmpty().First() })
+             .Join(e, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.Country, i.Market, u.Cost }).GroupBy(g => g.Market).Select(s => new
+             {
+                 market = s.Key,
+                 arr = s.GroupBy(gr => gr.Country).Select(se => new
+                 {
+                     market = s.Key,
+                     country = se.Select(q => q.Country).First(),
+                     sum = se.Distinct().Sum(q => q.Cost)
+                 })
+             }).SelectMany(z=>z.arr);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"Market: {item.market}\t Country: {item.country}\t Price: {item.sum}");
+            }*/
+            /*LinqObj84. Даны последовательности C, D и E, включающие следующие поля: Для каждого магазина и каждого товара 
+             * определить количество покупок этого товара со скидкой в данном магазине и суммарную стоимость этих покупок с учетом скидки
+             * (вначале выводится название магазина, затем артикул товара, потом количество покупок со скидкой и их суммарная стоимость).
+             * 
+             * При вычислении размера скидки на товар копейки отбрасываются. Если для некоторой пары «магазин–товар» не найдено ни одной покупки
+             * со скидкой, то информация о данной паре не выводится. Если не найдено ни одной подходящей пары «магазин–товар», 
+             * то записать в результирующий файл текст «Требуемые данные не найдены». Сведения о каждой паре «магазин–товар» выводить 
+             * на новой строке и упорядочивать по названиям магазинов в алфавитном порядке, а для одинаковых названий – по артикулам товаров 
+             * (также в алфавитном порядке).*/
+            /*var ans = c.GroupJoin(d, p => p.Market, p2 => p2.Market, (l, m) => new { l.Discount, l.Market, Cost = m.Select(s => s.Cost).First() })
+               .GroupJoin(e, q => q.Market, q2 => q2.Market, (u, i) => new { u.Discount, u.Market, Articul = i.Select(s => s.Articul).First(), u.Cost })
+               .GroupBy(g => g.Market).Select(s => new
+               {
+                   market = s.Key,
+                   arr = s.GroupBy(gr => gr.Articul).Select(se => new
+                   {
+                       art = se.Key,
+                       market = s.Key,
+                       countWithDiscount = se.Where(x => x.Discount != 0).Select(h => h.Articul).Distinct().Count(),
+                       priceWithDiscount = se.Where(x => x.Discount != 0).Distinct().Select(h => h.Cost * (h.Discount * 1.0 / 100)).Sum()
+                   })
+               }).SelectMany(z => z.arr).OrderBy(o => o.market).ThenBy(t => t.art);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.market}\tArticul: {item.art}\tCount: {item.countWithDiscount}\tTotal Price: {item.priceWithDiscount}");
+            }*/
+            /*LinqObj85. Даны последовательности C, D и E, включающие следующие поля: Для каждой пары «потребитель–магазин», указанной в E, 
+             * определить суммарный размер скидок на все товары, приобретенные этим потребителем в данном магазине 
+             * (вначале выводится код потребителя, затем название магазина, потом суммарный размер скидки).   
+             * При вычислении размера скидки на каждый приобретенный товар копейки отбрасываются. 
+             * Если потребитель приобретал товары в некотором магазине без скидки, то информация 
+             * о соответствующей паре «потребитель–магазин» не выводится. Если не найдено ни одной подходящей пары «потребитель–магазин», 
+             * то записать в результирующий файл текст «Требуемые данные не найдены». Сведения о каждой паре «потребитель–магазин» 
+             * выводить на новой строке и упорядочивать по возрастанию кодов потребителей, а для одинаковых кодов – по названиям магазинов 
+             * в алфавитном порядке.*/
+            /*var ans = c.GroupJoin(d, p => p.Market, p2 => p2.Market, (l, m) => new { l.Discount, l.Market })
+              .GroupJoin(e, q => q.Market, q2 => q2.Market, (u, i) => new
+              { u.Discount, Market=i.Select(s=>s.Market).First(), Id = i.Select(s => s.Id).First() })
+              .GroupBy(g => g.Id).Select(s => new
+              {
+                  id = s.Key,
+                  arr = s.GroupBy(gr => gr.Market).Select(se => new
+                  {
+                      id = s.Key,
+                      market = se.Key,
+                      totalDiscount = se.Where(x => x.Discount != 0).Select(h => h.Discount).Distinct().Sum(),
+                  })
+              }).SelectMany(z => z.arr).OrderBy(o => o.id).ThenBy(t => t.market);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.id}\t Market: {item.market}\tTotal Discount: {item.totalDiscount}");
+            }*/
+            /*LinqObj86. Даны последовательности C, D и E, включающие следующие поля: Для каждой пары «товар–магазин», указанной в E, 
+             * определить максимальный размер скидки на этот товар при его приобретении в данном магазине 
+             * (вначале выводится артикул товара, затем название магазина, потом максимальный размер скидки). 
+             * При вычислении размера скидки на товар копейки отбрасываются. Если все продажи товара в некотором магазине проводились без скидки,
+             * то в качестве максимального размера скидки для данной пары выводится 0. Сведения о каждой паре «товар–магазин» выводить на 
+             * новой строке и упорядочивать по артикулам товаров в алфавитном порядке, а для одинаковых артикулов – по названиям 
+             * магазинов (также в алфавитном порядке).*/
+            /*var ans = c.GroupJoin(d, p => p.Market, p2 => p2.Market, (l, m) => new { l.Discount, l.Market })
+              .GroupJoin(e, q => q.Market, q2 => q2.Market, (u, i) => new
+              {
+                  u.Discount,
+                  Market = i.Select(s => s.Market).Distinct(),//so so
+                  Articul = i.Select(s => s.Articul).First()
+              })
+              .GroupBy(g => g.Market).Select(s => new
+              {
+                  market = s.Select(q=>q.Market).First(),
+                  arr = s.GroupBy(gr => gr.Articul).Select(se => new
+                  {
+                      art = se.Distinct().Select(q=>q.Articul).First(),
+                      market = s.SelectMany(q => q.Market).First(),
+                      maxDiscount = se.DefaultIfEmpty().Distinct().Max(h => h.Discount)
+                  })
+              }).SelectMany(z => z.arr).OrderBy(o => o.art).ThenBy(t => t.market);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"Articul: {item.art}\t  Market: {item.market}\t  Max Discount: {item.maxDiscount}");
+            }*/
+            /*LinqObj87. Даны последовательности A, D и E, включающие следующие поля: Для каждой улицы проживания и каждого магазина, 
+             * указанного в E, определить суммарную стоимость покупок в данном магазине, сделанных всеми потребителями, живущими на данной 
+             * улице (вначале выводится название улицы, затем название магазина, потом суммарная стоимость покупок). Если для некоторой пары 
+             * «улица–магазин» отсутствует информация о проданных товарах, то в качестве суммарной стоимости выводится 0. Сведения о каждой 
+             * паре «улица–магазин» выводить на новой строке и упорядочивать по названиям улиц в алфавитном порядке, а для одинаковых названий 
+             * улиц – по названиям магазинов (также в алфавитном порядке).*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.Address, m.Market })
+               .Join(d, q => q.Market, q2 => q2.Market, (u, i) => new { u.Address, i.Cost, i.Market })
+               .GroupBy(g => g.Address).Select(s => new
+               { 
+                   Address=s.Key,
+                   arr=s.GroupBy(gr=>gr.Market).Select(se=>new {market=se.Key, Address = s.Key, sum=se.Distinct().DefaultIfEmpty().Sum(t=>t.Cost)})
+               }).SelectMany(z=>z.arr).OrderBy(o=>o.Address).ThenBy(t=>t.market);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.Address} \t {item.market} \t {item.sum}");
+            }*/
+            /*LinqObj88. Даны последовательности A, D и E, включающие следующие поля: Для каждого года рождения, указанного в A, и 
+             * каждого товара, указанного в E, определить суммарную стоимость покупок данного товара, сделанных всеми потребителями с данным 
+             * годом рождения (вначале выводится год рождения, затем артикул товара, потом суммарная стоимость покупок). Если для некоторой 
+             * пары «год–товар» отсутствуют сведения о проданных товарах, то информация об этой паре не выводится. Сведения о каждой паре 
+             * «год–товар» выводить на новой строке и упорядочивать по убыванию номеров года, а для одинаковых номеров – 
+             * по артикулам товаров в алфавитном порядке.*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.YearBirth, m.Articul })
+              .Join(d, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.YearBirth, i.Cost, i.Articul })
+              .GroupBy(g => g.YearBirth).Select(s => new
+              {
+                  year = s.Key,
+                  arr = s.GroupBy(gr => gr.Articul).Select(se => new { art = se.Key, year = s.Key,
+                      sum = se.Distinct().DefaultIfEmpty().Sum(t => t.Cost) })
+              }).SelectMany(z => z.arr).OrderByDescending(o => o.year).ThenBy(t => t.art);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.year} \t {item.art} \t {item.sum}");
+            }*/
+            /*LinqObj89. Даны последовательности A, D и E, включающие следующие поля: Для каждого магазина, указанного в E, 
+             * определить потребителя с наименьшим годом рождения, купившего один или более товаров в данном магазине (вначале выводится название 
+             * магазина, затем код потребителя, год его рождения и суммарная стоимость товаров, приобретенных потребителем в данном магазине).
+             * Если для некоторого магазина имеется несколько покупателей с наименьшим годом рождения, то выводятся данные обо всех таких 
+             * покупателях. Сведения о каждой паре «магазин–потребитель» выводить на новой строке и упорядочивать по названиям магазинов
+             * в алфавитном порядке, а для одинаковых названий магазинов – по возрастанию кодов потребителей.*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.YearBirth, m.Articul ,m.Id})
+             .Join(d, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.YearBirth,u.Id, i.Cost, i.Market })
+             .GroupBy(g => g.Market).Select(s => new
+             {
+                 market = s.Key,
+                 yeaar = s.Where(x => x.YearBirth == s.OrderBy(o => o.YearBirth).Select(z => z.YearBirth).First()).Select(r => r.YearBirth).First(),
+                 sum = s.Where(x => x.YearBirth == s.OrderBy(o => o.YearBirth).Select(z => z.YearBirth).First()).Distinct().Sum(t => t.Cost),
+                 Id = s.Where(x => x.YearBirth == s.OrderBy(o => o.YearBirth).Select(z => z.YearBirth).First()).Select(r => r.Id).First()
+             }).OrderBy(o=>o.market).ThenBy(t=>t.Id);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.market} \t {item.Id} \t {item.yeaar} \t {item.sum}");
+            }*/
+            /*LinqObj90. Даны последовательности A, B и E, включающие следующие поля: Для каждого года рождения из A определить  страну,
+             * в которой было произведено максимальное количество товаров, приобретенных потребителями этого года рождения 
+             * (вначале выводится год, затем название страны, потом максимальное количество покупок). Если для некоторой пары «год–страна»
+             * отсутствует информация о проданных товарах, то эта пара не обрабатывается (в частности, если потребители некоторого года рождения
+             * не сделали ни одной покупки, то информация об этом годе не выводится). Если для какого-либо года рождения имеется несколько стран 
+             * с наибольшим числом приобретенных товаров, то выводятся данные о первой из таких стран (в алфавитном порядке).
+             * Сведения о каждом годе выводить на новой строке и упорядочивать по убыванию номера года.*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.YearBirth, m.Articul })
+               .Join(b, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.YearBirth, i.Country, u.Articul })
+               .GroupBy(g => g.YearBirth).Select(s => new
+               {
+                   year=s.Key,
+                   country = s.Where(x => x.Articul == s.OrderBy(o => o.Articul).Select(z => z.Articul).Last()).Select(r => r.Country).First(),
+                   count = s.Where(x => x.Articul == s.OrderBy(o => o.Articul).Select(z => z.Articul).Last()).Select(r => r.Articul).Count()
+               }).OrderByDescending(o=>o.year);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.year} \t {item.country} \t {item.count}");
+            }*/
+            /*LinqObj91. Даны последовательности A, B и E, включающие следующие поля: Для каждой улицы и каждой категории товаров 
+             * определить количество стран, в которых были произведены товары данной категории, купленные потребителями, живущими 
+             * на этой улице (вначале выводится название улицы, затем название категории, потом количество стран). Если для какой-либо категории 
+             * отсутствует информация о товарах, проданных жителям некоторой улицы, то информация о соответствующей паре «улица–категория» 
+             * не выводится. Сведения о каждой паре «улица–категория» выводить на новой строке и упорядочивать по названиям улиц 
+             * в алфавитном порядке, а для одинаковых улиц – по названиям категорий (также в алфавитном порядке).*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.Address, m.Articul })
+               .Join(b, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.Address, i.Category, i.Country })
+               .GroupBy(g => g.Address).Select(s => new
+               {
+                   Address = s.Key,
+                   arr = s.GroupBy(gr => gr.Category).Select(se => new
+                   {
+                       cat=se.Key,
+                       Address=s.Key,
+                       count=se.Select(z=>z.Country).Count()
+                   })
+               }).SelectMany(q=>q.arr).OrderBy(o=>o.Address).ThenBy(t=>t.cat);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.Address} \t {item.cat} \t {item.count}");
+            }*/
+            /*LinqObj92. Даны последовательности A, B и E, включающие следующие поля: Для каждой категории товаров определить улицу
+             * с максимальным суммарным количеством товаров данной кате-гории, приобретенных жителями этой улицы (вначале выводится 
+             * название категории, затем название улицы, потом максимальное суммарное количество покупок). Если для какой-либо категории 
+             * отсутствует информация о товарах, проданных жителям некоторой улицы, то суммарное количество покупок для соответствующей 
+             * пары «категория–улица» считается равным 0 (при этом возможна ситуация, когда наибольшее количество покупок для какой-либо 
+             * категории равно 0). Если для некоторой категории имеется несколько улиц с наибольшим количеством покупок, то выводятся данные обо 
+             * всех таких улицах. Сведения о каждой паре «категория–улица» выводить на новой строке и упорядочивать по названиям категорий 
+             * в алфавитном порядке, а для одинаковых категорий – по названиям улиц (также в алфавитном порядке).*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.Address, m.Articul })
+              .Join(b, q => q.Articul, q2 => q2.Articul, (u, i) => new { u.Address, i.Category, u.Articul })
+              .GroupBy(g => g.Category).Select(s => new
+              {
+                  cat = s.Key,
+                  cou = s.Select(r => r.Articul).Count(),
+                  arr = s.GroupBy(gr=>gr.Address).Select(se=>new { cat = s.Key, cou = s.Select(r => r.Articul).Count(),street=se.Key })
+              }).SelectMany(z=>z.arr,(r,t)=>new {cco=r.arr.DefaultIfEmpty().Max(x=>x.cou), t.cat,t.street })
+              .OrderBy(o => o.cat).ThenBy(tt=>tt.street);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.cat} \t {item.street} \t {item.cco}");
+            }*/
+            /*LinqObj93. Даны последовательности A, B, C и E, включающие следующие поля: Для каждой страны-производителя и улицы проживания
+             * определить максимальный размер скидки (в процентах) для изделий, произведенных в данной стране и приобретенных потребителями,
+             * живущими на данной улице (вначале выводится название страны, затем название улицы, потом максимальный размер скидки).
+             * Если для некоторой пары «страна–улица» все товары были приобретены без скидки, то в качестве максимального размера скидки
+             * выводится 0. Если для некоторой пары «страна–улица» отсутствует информация о приобретенных товарах, то информация 
+             * о данной паре не выводится. Сведения о каждой паре «страна–улица» выводить на новой строке и упорядочивать по названиям стран 
+             * в алфавитном порядке, а для одинаковых названий – по названиям улиц (также в алфавитном порядке).*/
+            /*var ans = a.Join(c, p => p.Id, p2 => p2.Id, (l, m) => new { l.Address, m.Market, m.Discount })
+               .Join(e, q => q.Market, q2 => q2.Market, (u, i) => new { u.Address, u.Discount, i.Articul, u.Market })
+               .Join(b, w => w.Articul, w2 => w2.Articul, (f, h) => new { f.Address, f.Discount, h.Country })
+               .GroupBy(g => g.Country).Select(s => new
+               {
+                   country = s.Key,
+                   arr = s.GroupBy(gr => gr.Address).Select(se => new
+                   {
+                       country = s.Key,
+                       street=se.Key,
+                       maxDisc=se.Max(z=>z.Discount)
+                   })
+               }).SelectMany(x=>x.arr).OrderBy(o=>o.country).ThenBy(t=>t.street);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.country} \t {item.street} \t {item.maxDisc}");
+            }*/
+            /*LinqObj94. Даны последовательности A, B, C и E, включающие следующие поля: Для каждого магазина, указанного в E, и каждой 
+             * категории товаров определить минимальное значение года рождения среди тех потребителей, которые приобрели в данном магазине 
+             * один или более товаров данной категории, и количество товаров данной категории, приобретенных со скидкой в данном магазине 
+             * потребителями этого года рождения (вначале выводится название магазина, затем название категории, потом номер минимального года 
+             * рождения и количество товаров, приобретенных со скидкой). Если для некоторой пары «магазин–категория» информация о проданных 
+             * товарах отсутствует, то данные об этой паре не выводятся. Если для некоторой пары «магазин–категория» покупатели с минимальным 
+             * годом рождения приобрели все товары без скидки, то в качестве значения количества товаров, приобретенных со скидкой, выводится 0.
+             * Сведения о каждой паре «магазин–категория» выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке,
+             * а для одинаковых названий магазинов – по названиям категорий (также в алфавитном порядке).*/
+            /*var ans = a.Join(c, p => p.Id, p2 => p2.Id, (l, m) => new {l.YearBirth,  m.Market, m.Discount })
+              .Join(e, q => q.Market, q2 => q2.Market, (u, i) => new {u.YearBirth,u.Discount, i.Articul, u.Market })
+              .Join(b, w => w.Articul, w2 => w2.Articul, (f, h) => new {f.YearBirth,f.Market, f.Discount,h.Category })
+              .GroupBy(g => g.Market).Select(s => new
+              {
+                  market = s.Key,
+                  arr = s.GroupBy(gr => gr.Category).Select(se => new
+                  {
+                      market = s.Key,
+                      cat = se.Key,
+                      minYear = se.Min(z => z.YearBirth),
+                      count=se.Where(x=>x.YearBirth== se.Max(z => z.YearBirth)).Select(z=>z.Category).Distinct().DefaultIfEmpty().Count()
+                  })
+              }).SelectMany(x => x.arr).OrderBy(o => o.market).ThenBy(t => t.cat);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.market} \t {item.cat} \t {item.minYear} \t {item.count}");
+            }*/
+            /*LinqObj95. Даны последовательности A, C, D и E, включающие следующие поля: Для каждого артикула товара, указанного в E, 
+             * и каждой улицы проживания определить суммарный размер скидки на изделия данного артикула, приобретенные потребителями,
+             * живущими на данной улице (вначале выводится артикул товара, затем название улицы, потом суммарный размер скидки). 
+             * При вычислении размера скидки на товар копейки отбрасываются. Если на проданный товар скидка отсутствует, 
+             * то ее размер полагается равным 0. Если для некоторой пары «товар–улица» отсутствует информация о приобретенных товарах,
+             * то данные об этой паре не выводятся. Если для некоторой пары «товар–улица» все изделия были приобретены без скидок, 
+             * то в качестве суммарной скидки для этой пары выводится 0. Сведения о каждой паре «товар–улица» выводить на новой строке 
+             * и упорядочивать по артикулам товаров в алфавитном порядке, а для одинаковых артикулов – по названиям улиц 
+             * (также в алфавитном порядке).*/
+            /* var ans = a.Join(c, p => p.Id, p2 => p2.Id, (l, m) => new { l.Address, m.Discount, m.Market })
+                .Join(d, q => q.Market, q2 => q2.Market, (u, i) => new { i.Articul, u.Address, u.Discount })
+                .Join(e, w => w.Articul, w2 => w2.Articul, (f, h) => new { f.Address, f.Articul, f.Discount })
+                .GroupBy(g => g.Articul).Select(s => new
+                {
+                    art = s.Key,
+                    arr = s.GroupBy(gr => gr.Address).Select(se => new
+                    {
+                        art = s.Key,
+                        street=se.Key,
+                        sum=se.Distinct().DefaultIfEmpty().Sum(q=>q.Discount)
+                    })
+                }).SelectMany(x=>x.arr).OrderBy(o=>o.art).ThenBy(t=>t.street);
+             foreach (var item in ans)
+             {
+                 Console.WriteLine($"{item.art} \t {item.street} \t {item.sum}");
+             }*/
+            /*LinqObj96. Даны последовательности A, C, D и E, включающие следующие поля: Для каждого года рождения, указанного в A, и 
+             * каждого магазина, указанного в E, определить суммарную стоимость всех товаров (с учетом скидки), проданных в данном магазине 
+             * потребителям данного года рождения (вначале выводится номер года, затем название магазина, потом суммарная стоимость проданных 
+             * товаров с учетом скидки). При вычислении размера скидки на товар копейки отбрасываются. Если на проданный товар скидка отсутствует,
+             * то ее размер полагается равным 0. Если для некоторой пары «год–магазин» отсутствует информация о проданных товарах, 
+             * то данные об этой паре не выводятся. Сведения о каждой паре «год-магазин» выводить на новой строке и упорядочивать 
+             * по возрастанию номеров года, а для одинаковых номеров – по названиям магазинов в алфавитном порядке.*/
+            /*var ans = a.Join(c, p => p.Id, p2 => p2.Id, (l, m) => new { l.YearBirth, m.Discount, m.Market })
+              .Join(d, q => q.Market, q2 => q2.Market, (u, i) => new { i.Articul,i.Cost, u.YearBirth, u.Discount })
+              .Join(e, w => w.Articul, w2 => w2.Articul, (f, h) => new { f.YearBirth,f.Cost, h.Market, f.Discount })
+              .GroupBy(g => g.YearBirth).Select(s => new
+              {
+                  year = s.Key,
+                  arr = s.GroupBy(gr => gr.Market).Select(se => new
+                  {
+                      year = s.Key,
+                      market = se.Key,
+                      sum = se.Distinct().DefaultIfEmpty().Select(q => q.Cost*(q.Discount*1.0/100)).Sum()
+                  })
+              }).SelectMany(x => x.arr).OrderBy(o => o.year).ThenBy(t => t.market);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.year} \t {item.market} \t {item.sum:f0}");
+            }*/
+            /*LinqObj97. Даны последовательности B, C, D и E, включающие следующие поля: Для каждой страны-производителя и каждого 
+             * потребителя определить суммарную стоимость (с учетом скидки) всех товаров, произведенных в данной стране и приобретенных этим 
+             * потребителем (вначале выводится название страны, затем код потребителя, потом суммарная стоимость с учетом скидки). 
+             * При вычислении размера скидки на товар копейки отбрасываются. Если на проданный товар скидка отсутствует, 
+             * то ее размер полагается равным 0. Если для некоторой пары «страна–потребитель» данные о покупках отсутствуют,
+             * то информация об этой паре не выводится. Сведения о каждой паре «страна–потребитель» выводить на новой строке и упорядочивать 
+             * по названиям стран в алфавитном порядке, а для одинаковых названий стран – по возрастанию кодов потребителей.*/
+            /*var ans = b.Join(d, p => p.Articul, p2 => p2.Articul, (l, m) => new { l.Country, m.Market, m.Cost })
+               .Join(e, q => q.Market, q2 => q2.Market, (u, i) => new { u.Country, i.Id, u.Cost })
+               .Join(c, w => w.Id, w2 => w2.Id, (f, h) => new { f.Cost, f.Country, f.Id, h.Discount })
+               .GroupBy(g => g.Country).Select(s => new
+               {
+                   country = s.Key,
+                   arr = s.GroupBy(gr => gr.Id).Select(se => new
+                   {
+                       country = s.Key,
+                       sum = se.Distinct().DefaultIfEmpty().Select(q => q.Cost * (q?.Discount * 1.0 / 100)).Sum(),
+                       id=se.Key
+                   })
+               }).SelectMany(z=>z.arr).OrderBy(o=>o.country).ThenBy(t=>t.id);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.country} \t {item.id} \t {item.sum:f0}");
+            }*/
+            /*LinqObj98. Даны последовательности B, C, D и E, включающие следующие поля: Для каждой категории товаров и каждого магазина,
+             * указанного в E, определить суммарный размер скидки на все товары данной категории, проданные в данном магазине (вначале 
+             * выводится название категории, затем название магазина, потом суммарная скидка). При вычислении размера скидки на товар копейки
+             * отбрасываются. Если на проданный товар скидка отсутствует, то ее размер полагается равным 0. Если для некоторой категории товаров 
+             * в каком-либо магазине не было продаж, то суммарная скидка для этой пары «категория–магазин» полагается равной –1. Сведения 
+             * о каждой паре «категория–магазин» выводить на новой строке и упорядочивать по названиям категорий в алфавитном порядке, а для 
+             * одинаковых названий категорий – по названиям магазинов (также в алфавитном порядке).*/
+            /*var ans = b.Join(d, p => p.Articul, p2 => p2.Articul, (l, m) => new { l.Category, m.Market, m.Cost })
+              .Join(e, q => q.Market, q2 => q2.Market, (u, i) => new { u.Category, i.Id, u.Cost,u.Market })
+              .Join(c, w => w.Id, w2 => w2.Id, (f, h) => new { f.Market, f.Category, h.Discount })
+              .GroupBy(g => g.Category).Select(s => new
+              {
+                  cat = s.Key,
+                  arr = s.GroupBy(gr => gr.Market).Select(se => new
+                  {
+                      market = se.Key,
+                      sum = se.Distinct().DefaultIfEmpty().Sum(x=>x.Discount),
+                      cat = s.Key
+                  })
+              }).SelectMany(z => z.arr).OrderBy(o => o.cat).ThenBy(t => t.market);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.cat} \t {item.market} \t {item.sum}");
+            }*/
+            /*LinqObj99. Даны последовательности A, B, D и E, включающие следующие поля: Для каждой категории товаров и каждой улицы 
+             * проживания определить магазин, продавший товар данной категории по минимальной цене потребителю, живущему на данной улице
+             * (вначале выводится название категории, затем название улицы, потом название магазина и минимальная цена товара). 
+             * Если для некоторой пары «категория–улица» отсутствует информация о проданных товарах, то данные об этой паре не выводятся. 
+             * Если для некоторой пары «категория–улица» имеется несколько магазинов, продавших товар по минимальной цене, 
+             * то выводятся данные обо всех таких магазинах. Сведения о каждой тройке «категория–улица–магазин» выводить на новой строке 
+             * и упорядочивать по названиям категорий в алфавитном порядке, для одинаковых названий категорий – по названиям улиц,
+             * а для одинаковых названий улиц – по названиям магазинов (также в алфавитном порядке).*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.Address, m.Market })
+               .Join(d, q => q.Market, q2 => q2.Market, (u, i) => new { u.Address, u.Market, i.Cost, i.Articul })
+               .Join(b, w => w.Articul, w2 => w2.Articul, (f, h) => new { f.Address, f.Market, f.Cost, h.Category })
+               .GroupBy(g => g.Category).Select(s => new
+               {
+                   cat = s.Key,
+                   arr = s.GroupBy(gr => gr.Address).Select(se => new
+                   {
+                       cat = s.Key,
+                       street = se.Key,
+                       minMarket=se.Where(x=>x.Cost==se.Min(z=>z.Cost)).Select(q=>q.Market).First(),
+                       minCost= se.Where(x => x.Cost == se.Min(z => z.Cost)).Select(q => q.Cost).First()
+                   })
+               }).SelectMany(z=>z.arr).OrderBy(o=>o.cat).ThenBy(t=>t.street).ThenBy(y=>y.minMarket);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.cat} \t {item.street} \t {item.minMarket} \t {item.minCost}");
+            }*/
+            /*LinqObj100. Даны последовательности A, B, D и E, включающие следующие поля: Для каждой страны-производителя и каждого 
+             * магазина определить потребителя с наибольшим годом рождения, купившего в данном магазине один или более товаров,
+             * произведенных в данной стране (вначале выводится название страны, затем название магазина, потом год рождения потребителя, 
+             * его код, а также суммарная стоимость товаров из данной страны, купленных в этом магазине). Если для некоторой пары «страна–магазин» 
+             * отсутствует информация о проданных товарах, то данные об этой паре не выводятся. Если для некоторой пары «страна–магазин» 
+             * имеется несколько потребителей с наибольшим годом рождения, то выводятся данные обо всех таких потребителях. Сведения о каждой 
+             * тройке «страна–магазин–потреби тель» выводить на новой строке и упорядочивать по названиям стран в алфавитном порядке, 
+             * для одинаковых названий стран – по названиям магазинов (также в алфавитном порядке), а для одинаковых магазинов – по возрастанию 
+             * кодов потребителей.*/
+            /*var ans = a.Join(e, p => p.Id, p2 => p2.Id, (l, m) => new { l.YearBirth, m.Market ,l.Id})
+              .Join(d, q => q.Market, q2 => q2.Market, (u, i) => new { u.YearBirth,u.Id, u.Market, i.Cost, i.Articul })
+              .Join(b, w => w.Articul, w2 => w2.Articul, (f, h) => new {f.Id,f.YearBirth, f.Market, f.Cost, h.Category,h.Country })
+              .GroupBy(g => g.Country).Select(s => new
+              {
+                  country = s.Key,
+                  arr = s.GroupBy(gr => gr.Market).Select(se => new
+                  {
+                      country = s.Key,
+                      market = se.Key,
+                      id = se.Where(x => x.YearBirth == se.Min(z => z.YearBirth)).Select(q => q.Id).First(),
+                      year = se.Where(x => x.YearBirth == se.Min(z => z.YearBirth)).Select(q => q.YearBirth).First(),
+                      total = se.Where(x => x.YearBirth == se.Min(z => z.YearBirth)).Sum(q => q.Cost)
+                  })
+              }).SelectMany(z => z.arr).OrderBy(o => o.country).ThenBy(t => t.market).ThenBy(y => y.id);
+            foreach (var item in ans)
+            {
+                Console.WriteLine($"{item.country} \t {item.market} \t {item.year} \t {item.id} \t {item.total}");
+            }*/
+            Console.ReadKey();
+        }
+    }
+}
